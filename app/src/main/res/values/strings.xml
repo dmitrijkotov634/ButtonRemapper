@@ -11,6 +11,12 @@
         <item>Последние приложения</item>
         <item>Следущий трек</item>
         <item>Предыдущий трек</item>
+        <item>Старт / Пауза</item>
+        <item>Уведомления</item>
+        <item>Быстрые настройки</item>
+        <item>Скриншот</item>
+        <item>Выключение / Перезагрузка</item>
+        <item>Разделение экрана</item>
     </string-array>
     
     <string name="request">Выберите ButtonRemap</string>

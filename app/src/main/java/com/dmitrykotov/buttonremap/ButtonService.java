@@ -20,13 +20,13 @@ public class ButtonService extends AccessibilityService {
     
     @Override
     protected void onServiceConnected() {
+        super.onServiceConnected();
         keys = getSharedPreferences("keys", Context.MODE_PRIVATE);
 
-        super.onServiceConnected();
 		AccessibilityServiceInfo info = new AccessibilityServiceInfo();
 		info.flags = AccessibilityServiceInfo.DEFAULT | AccessibilityServiceInfo.FLAG_REQUEST_FILTER_KEY_EVENTS;
 
-		info.eventTypes = AccessibilityEvent.TYPES_ALL_MASK;
+		info.eventTypes = 0;
 		info.feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC;
 
 		setServiceInfo(info);
@@ -59,6 +59,25 @@ public class ButtonService extends AccessibilityService {
                     case 4:
                         mAudioManager.dispatchMediaKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PREVIOUS));
                         mAudioManager.dispatchMediaKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PREVIOUS));
+                        break;
+                    case 5:
+                        mAudioManager.dispatchMediaKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE));
+                        mAudioManager.dispatchMediaKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE));
+                        break;
+                    case 6:
+                        performGlobalAction(GLOBAL_ACTION_NOTIFICATIONS);
+                        break;
+                    case 7:
+                        performGlobalAction(GLOBAL_ACTION_QUICK_SETTINGS);
+                        break;
+                    case 8:
+                        performGlobalAction(GLOBAL_ACTION_TAKE_SCREENSHOT);
+                        break;
+                    case 9:
+                        performGlobalAction(GLOBAL_ACTION_POWER_DIALOG);
+                        break;
+                    case 10:
+                        performGlobalAction(GLOBAL_ACTION_TOGGLE_SPLIT_SCREEN);
                         break;
                 }
             }
