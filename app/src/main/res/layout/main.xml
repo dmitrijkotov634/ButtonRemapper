@@ -12,33 +12,37 @@
 		android:layout_height="wrap_content"
 		android:gravity="center_vertical">
 
+		<Spinner
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:entries="@array/action"
+			android:layout_marginBottom="10dp"
+			android:id="@+id/spinAction"/>
+
 		<EditText
-			android:layout_width="wrap_content"
+			android:layout_width="match_parent"
 			android:inputType="number"
 			android:layout_height="wrap_content"
 			android:ems="12"
 			android:textSize="17sp"
-			android:hint="Исходная кнопка"
+			android:hint="@string/source_id"
 			android:layout_marginBottom="10dp"
-			android:id="@+id/source"/>
+			android:id="@+id/sourceId"/>
 
 		<Spinner
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:entries="@array/buttons"
-			android:id="@+id/modified"/>
+			android:entries="@array/reaction"
+			android:id="@+id/spinEffect"/>
+
+		<CheckBox
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@string/chk_replace"
+			android:id="@+id/chkReplace"
+			android:layout_marginTop="10dp"/>
 
 	</LinearLayout>
-
-	<TextView
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:text="@string/info"
-		android:textAppearance="?android:attr/textAppearanceSmall"
-		android:paddingLeft="30dp"
-		android:paddingRight="30dp"
-		android:gravity="center_horizontal"
-		android:paddingTop="10dp"/>
 
 </LinearLayout>
 

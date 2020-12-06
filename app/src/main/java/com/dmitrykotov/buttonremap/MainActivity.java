@@ -20,45 +20,67 @@ import android.view.accessibility.AccessibilityEvent;
 import android.content.Intent;
 import android.provider.Settings;
 import android.widget.Toast;
+import android.widget.CheckBox;
 
 public class MainActivity extends Activity {
 	public SharedPreferences keys;
 
-    public EditText source;
-    public Spinner modified;
+    public EditText sourceId;
+    public Spinner spinEffect;
+    public Spinner spinAction;
+    public CheckBox chkReplace;
+
+    public boolean save = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        source = findViewById(R.id.source);
-        modified = findViewById(R.id.modified);
+        keys = getSharedPreferences("keys", Context.MODE_PRIVATE);
 
-        source.addTextChangedListener(new TextWatcher() {
+        sourceId = findViewById(R.id.sourceId);
+        spinEffect = findViewById(R.id.spinEffect);
+        spinAction = findViewById(R.id.spinAction);
+        chkReplace = findViewById(R.id.chkReplace);
 
-                public void afterTextChanged(Editable s) {}
+        sourceId.addTextChangedListener(new TextWatcher() {
 
-                public void beforeTextChanged(CharSequence s, int start,
-                                              int count, int after) {
-                }
+                public void afterTextChanged(Editable s) {};
+
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {};
 
                 public void onTextChanged(CharSequence s, int start,
                                           int before, int count) {
-                    modified.setSelection(keys.getInt(s.toString(), 0));
+                    spinEffect.setSelection(keys.getInt(sourceId.getText().toString() + spinAction.getSelectedItemPosition(), 0));
+                    chkReplace.setChecked(keys.getBoolean(sourceId.getText().toString() + "i", false));
                 }
             });
 
-        modified.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
+        spinAction.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
 
                 @Override
                 public void onItemSelected(AdapterView<?> p1, View item, int position, long selectedId) {
+                    spinEffect.setSelection(keys.getInt(sourceId.getText().toString() + spinAction.getSelectedItemPosition(), 0));
+                    chkReplace.setChecked(keys.getBoolean(sourceId.getText().toString() + "i", false));
+                }
 
+                @Override
+                public void onNothingSelected(AdapterView<?> p1) {};
+            });
+
+        spinEffect.setOnItemSelectedListener(new Spinner.OnItemSelectedListener() {
+
+                @Override
+                public void onItemSelected(AdapterView<?> p1, View item, int position, long selectedId) {
                     SharedPreferences.Editor editor = keys.edit();
-                    if (modified.getSelectedItemPosition() == 0)
-                        editor.remove(source.getText().toString());
-                    else
-                        editor.putInt(source.getText().toString(), modified.getSelectedItemPosition());
+                    if (spinEffect.getSelectedItemPosition() == 0) {
+                        editor.remove(sourceId.getText().toString() + spinAction.getSelectedItemPosition());
+                        editor.remove(sourceId.getText().toString() + "i");
+                    } else {
+                        editor.putInt(sourceId.getText().toString() + spinAction.getSelectedItemPosition(), spinEffect.getSelectedItemPosition());
+                        editor.putBoolean(sourceId.getText().toString() + "i", chkReplace.isChecked());
+                    }
                     editor.apply();
                 }
 
@@ -71,12 +93,11 @@ public class MainActivity extends Activity {
     @Override
     protected void onStart() {
         super.onStart();
-        keys = getSharedPreferences("keys", Context.MODE_PRIVATE);
-        
+
         SharedPreferences.Editor editor = keys.edit();
-        editor.putBoolean("locked", true);
+        editor.putBoolean("lock", true);
         editor.apply();
-        
+
         if (!checkAccess()) {
             Toast.makeText(getApplicationContext(), getString(R.string.request), 1000).show();
             Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
@@ -87,12 +108,12 @@ public class MainActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-        
+
         SharedPreferences.Editor editor = keys.edit();
-        editor.putBoolean("locked", false);
+        editor.putBoolean("lock", false);
         editor.apply();
     }
-    
+
     public boolean checkAccess() {
         String string = getString(R.string.accessibility_service_id);
         for (AccessibilityServiceInfo id : ((AccessibilityManager) getSystemService(Context.ACCESSIBILITY_SERVICE)).getEnabledAccessibilityServiceList(AccessibilityEvent.TYPES_ALL_MASK)) {
@@ -102,9 +123,9 @@ public class MainActivity extends Activity {
         }
         return false;
     }
-    
+
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-        source.setText(String.valueOf(keyCode));
+        sourceId.setText(String.valueOf(keyCode));
         return true;
 	}
 }

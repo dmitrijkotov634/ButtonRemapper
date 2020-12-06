@@ -5,7 +5,7 @@
 	<string name="accessibility_service_description">Сервис специальных возможностей для замены физических кнопок на определенные действия</string>
     <string name="accessibility_service_id">com.dmitrykotov.buttonremap/.ButtonService</string>
     
-	<string-array name="buttons">
+	<string-array name="reaction">
         <item>Стандартное действие</item>
         <item>Назад</item>
         <item>Последние приложения</item>
@@ -19,6 +19,13 @@
         <item>Разделение экрана</item>
     </string-array>
     
+    <string-array name="action">
+        <item>Простое нажатие</item>
+        <item>Долгое нажатие</item>
+    </string-array>
+    
+    <string name="source_id">Исходная кнопка</string>
+    <string name="chk_replace">Не заменять стандартное действие</string>
     <string name="request">Выберите ButtonRemap</string>
     <string name="info">Нажмите на ту клавишу которую хотите заменить</string>
 </resources>
