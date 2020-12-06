@@ -31,7 +31,6 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-		keys = getSharedPreferences("keys", Context.MODE_PRIVATE);
 
         source = findViewById(R.id.source);
         modified = findViewById(R.id.modified);
@@ -72,16 +71,30 @@ public class MainActivity extends Activity {
     @Override
     protected void onStart() {
         super.onStart();
+        keys = getSharedPreferences("keys", Context.MODE_PRIVATE);
+        
+        SharedPreferences.Editor editor = keys.edit();
+        editor.putBoolean("locked", true);
+        editor.apply();
         
         if (!checkAccess()) {
-            Toast.makeText(getApplicationContext(), "Выберите ButtonRemap", 1000).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.request), 1000).show();
             Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
             startActivity(intent);
         }
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        
+        SharedPreferences.Editor editor = keys.edit();
+        editor.putBoolean("locked", false);
+        editor.apply();
+    }
+    
     public boolean checkAccess() {
-        String string = getString(R.string.accessibilityservice_id);
+        String string = getString(R.string.accessibility_service_id);
         for (AccessibilityServiceInfo id : ((AccessibilityManager) getSystemService(Context.ACCESSIBILITY_SERVICE)).getEnabledAccessibilityServiceList(AccessibilityEvent.TYPES_ALL_MASK)) {
             if (string.equals(id.getId())) {
                 return true;
@@ -89,6 +102,7 @@ public class MainActivity extends Activity {
         }
         return false;
     }
+    
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
         source.setText(String.valueOf(keyCode));
         return true;

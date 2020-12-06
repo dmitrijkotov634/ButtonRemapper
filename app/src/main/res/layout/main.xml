@@ -10,8 +10,7 @@
 		android:orientation="vertical"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:gravity="center_vertical"
-		android:id="@+id/clgroup">
+		android:gravity="center_vertical">
 
 		<EditText
 			android:layout_width="wrap_content"
@@ -34,12 +33,12 @@
 	<TextView
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text="Только физические клавиши можно переопределять"
+		android:text="@string/info"
 		android:textAppearance="?android:attr/textAppearanceSmall"
 		android:paddingLeft="30dp"
 		android:paddingRight="30dp"
 		android:gravity="center_horizontal"
-		android:layout_marginTop="10dp"/>
+		android:paddingTop="10dp"/>
 
 </LinearLayout>
 

@@ -2,13 +2,17 @@
 <resources>
 
     <string name="app_name">ButtonRemap</string>
-	<string name="accessibility_service_description">Testing Accesibily Service</string>
-    <string name="accessibilityservice_id">com.dmitrykotov.buttonremap/.ButtonService</string>
+	<string name="accessibility_service_description">Сервис специальных возможностей для замены физических кнопок на определенные действия</string>
+    <string name="accessibility_service_id">com.dmitrykotov.buttonremap/.ButtonService</string>
     
 	<string-array name="buttons">
         <item>Стандартное действие</item>
         <item>Назад</item>
         <item>Последние приложения</item>
+        <item>Следущий трек</item>
+        <item>Предыдущий трек</item>
     </string-array>
     
+    <string name="request">Выберите ButtonRemap</string>
+    <string name="info">Нажмите на ту клавишу которую хотите заменить</string>
 </resources>

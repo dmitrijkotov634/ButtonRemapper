@@ -10,12 +10,14 @@ import android.content.*;
 import android.content.pm.*;
 import android.view.*;
 import android.widget.Toast;
+import android.media.AudioManager;
 
 public class ButtonService extends AccessibilityService {
 	public static String currentPackageName = "com.dmitrykotov.buttonremap";
 
     public SharedPreferences keys;
-
+    public AudioManager mAudioManager;
+    
     @Override
     protected void onServiceConnected() {
         keys = getSharedPreferences("keys", Context.MODE_PRIVATE);
@@ -28,6 +30,8 @@ public class ButtonService extends AccessibilityService {
 		info.feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC;
 
 		setServiceInfo(info);
+        
+        mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
     }
 
 	public void onAccessibilityEvent(AccessibilityEvent event) {
@@ -39,6 +43,7 @@ public class ButtonService extends AccessibilityService {
 		if (modified == 0) {
             return super.onKeyEvent(event);
         } else {
+            if (keys.getBoolean("locked", false)) return false;
             if (event.getAction() == event.ACTION_DOWN) {
                 switch (modified) {
                     case 1:
@@ -47,7 +52,14 @@ public class ButtonService extends AccessibilityService {
                     case 2:
                         performGlobalAction(GLOBAL_ACTION_RECENTS);
                         break;
-
+                    case 3: 
+                        mAudioManager.dispatchMediaKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_NEXT));
+                        mAudioManager.dispatchMediaKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_NEXT));
+                        break;
+                    case 4:
+                        mAudioManager.dispatchMediaKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_PREVIOUS));
+                        mAudioManager.dispatchMediaKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_PREVIOUS));
+                        break;
                 }
             }
             return true;
