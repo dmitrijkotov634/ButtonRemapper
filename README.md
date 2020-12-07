@@ -1,6 +1,6 @@
 <div align="center">
 	<h1>Button Remap</h1>
  
-Remap buttons on Android device
+Переназначение клавиш на android устройстве на определенные действия
 
 </div>
