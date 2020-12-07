@@ -40,7 +40,8 @@
 			android:layout_height="wrap_content"
 			android:text="@string/chk_replace"
 			android:id="@+id/chkReplace"
-			android:layout_marginTop="10dp"/>
+			android:layout_marginTop="10dp"
+			android:onClick="updateKey"/>
 
 	</LinearLayout>
 

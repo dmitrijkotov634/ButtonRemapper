@@ -9,7 +9,6 @@ import android.view.accessibility.*;
 import android.content.*;
 import android.content.pm.*;
 import android.view.*;
-import android.widget.Toast;
 import android.media.AudioManager;
 import android.util.Log;
 import java.util.HashMap;

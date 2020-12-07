@@ -9,7 +9,6 @@ import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.AdapterView;
 import android.widget.Adapter;
@@ -73,15 +72,7 @@ public class MainActivity extends Activity {
 
                 @Override
                 public void onItemSelected(AdapterView<?> p1, View item, int position, long selectedId) {
-                    SharedPreferences.Editor editor = keys.edit();
-                    if (spinEffect.getSelectedItemPosition() == 0) {
-                        editor.remove(sourceId.getText().toString() + spinAction.getSelectedItemPosition());
-                        editor.remove(sourceId.getText().toString() + "i");
-                    } else {
-                        editor.putInt(sourceId.getText().toString() + spinAction.getSelectedItemPosition(), spinEffect.getSelectedItemPosition());
-                        editor.putBoolean(sourceId.getText().toString() + "i", chkReplace.isChecked());
-                    }
-                    editor.apply();
+                    updateKey(spinEffect);
                 }
 
                 @Override
@@ -123,7 +114,19 @@ public class MainActivity extends Activity {
         }
         return false;
     }
-
+    
+    public void updateKey(View view) {
+        SharedPreferences.Editor editor = keys.edit();
+        if (spinEffect.getSelectedItemPosition() == 0) {
+            editor.remove(sourceId.getText().toString() + spinAction.getSelectedItemPosition());
+            editor.remove(sourceId.getText().toString() + "i");
+        } else {
+            editor.putInt(sourceId.getText().toString() + spinAction.getSelectedItemPosition(), spinEffect.getSelectedItemPosition());
+            editor.putBoolean(sourceId.getText().toString() + "i", chkReplace.isChecked());
+        }
+        editor.apply();
+    }
+    
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
         sourceId.setText(String.valueOf(keyCode));
         return true;
