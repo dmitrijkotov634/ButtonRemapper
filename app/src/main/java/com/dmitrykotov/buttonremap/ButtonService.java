@@ -10,14 +10,17 @@ import android.content.*;
 import android.content.pm.*;
 import android.view.*;
 import android.media.AudioManager;
-import android.util.Log;
 import java.util.HashMap;
 
 public class ButtonService extends AccessibilityService {
 	public static String currentPackageName = "com.dmitrykotov.buttonremap";
-
+    
+    private static ButtonService sSharedInstance;
+    
     public SharedPreferences keys;
     public AudioManager mAudioManager;
+    
+    public boolean state = true;
     HashMap<Integer, Long> tempKey = new HashMap<Integer, Long>();
 
     @Override
@@ -34,12 +37,23 @@ public class ButtonService extends AccessibilityService {
         
         keys = getSharedPreferences("keys", Context.MODE_PRIVATE);
         mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        
+        sSharedInstance = this;
     }
 
+    public boolean onUnbind(Intent intent) {
+        sSharedInstance = null;
+        return super.onUnbind(intent);
+    }
+    
+    public static ButtonService getSharedInstance() {
+        return sSharedInstance;
+    }
+    
 	public void onAccessibilityEvent(AccessibilityEvent event) {}
-
+    
 	protected boolean onKeyEvent(KeyEvent event) {
-        if (keys.getBoolean("lock", false)) return false;
+        if (!state) return false;
         if (event.getAction() == event.ACTION_DOWN) {
             tempKey.put(event.getKeyCode(), SystemClock.uptimeMillis());
             if (keys.getBoolean(String.valueOf(event.getKeyCode()) + "i", true)) return false;

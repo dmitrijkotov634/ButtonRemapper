@@ -30,14 +30,15 @@ public class MainActivity extends Activity {
     public CheckBox chkReplace;
 
     public boolean save = false;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    
+    ButtonService bService;
+    
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
         keys = getSharedPreferences("keys", Context.MODE_PRIVATE);
-
+        
         sourceId = findViewById(R.id.sourceId);
         spinEffect = findViewById(R.id.spinEffect);
         spinAction = findViewById(R.id.spinAction);
@@ -79,16 +80,7 @@ public class MainActivity extends Activity {
                 public void onNothingSelected(AdapterView<?> p1) {
                 }
             });
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        SharedPreferences.Editor editor = keys.edit();
-        editor.putBoolean("lock", true);
-        editor.apply();
-
+        
         if (!checkAccess()) {
             Toast.makeText(getApplicationContext(), getString(R.string.request), 1000).show();
             Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
@@ -96,23 +88,19 @@ public class MainActivity extends Activity {
         }
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        SharedPreferences.Editor editor = keys.edit();
-        editor.putBoolean("lock", false);
-        editor.apply();
+    public void onStart() {
+        super.onStart();
+        switchState(false);
     }
 
-    public boolean checkAccess() {
-        String string = getString(R.string.accessibility_service_id);
-        for (AccessibilityServiceInfo id : ((AccessibilityManager) getSystemService(Context.ACCESSIBILITY_SERVICE)).getEnabledAccessibilityServiceList(AccessibilityEvent.TYPES_ALL_MASK)) {
-            if (string.equals(id.getId())) {
-                return true;
-            }
-        }
-        return false;
+    public void onPause() {
+        super.onPause();
+        switchState(true);
+    }
+    
+    public void switchState(boolean state) {
+        bService = ButtonService.getSharedInstance();
+        if (bService != null) bService.state = state;
     }
     
     public void updateKey(View view) {
@@ -131,4 +119,14 @@ public class MainActivity extends Activity {
         sourceId.setText(String.valueOf(keyCode));
         return true;
 	}
+    
+    public boolean checkAccess() {
+        String string = getString(R.string.accessibility_service_id);
+        for (AccessibilityServiceInfo id : ((AccessibilityManager) getSystemService(Context.ACCESSIBILITY_SERVICE)).getEnabledAccessibilityServiceList(AccessibilityEvent.TYPES_ALL_MASK)) {
+            if (string.equals(id.getId())) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
